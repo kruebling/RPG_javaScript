@@ -20,8 +20,8 @@ export class Living  {
     this.strength = strength;
     this.pos_y = x;
     this.pos_x = y;
-    // this.items = [];
-    // this.spells = [];
+    this.satchel = [];
+    // this.spellbook = [];
   }
 
   move(y, x, an_env){
@@ -50,4 +50,58 @@ export class Enemy extends Living {
   constructor(name,lvl,health,strength,x,y) {
     super(name,lvl,health,0,strength,x,y);
   }
+}
+
+export class Static {
+  constructor(name, x, y, passable) {
+    this.name = name
+    this.x = x
+    this.y = y
+    this.passable = passable
+  }
+}
+
+export class Item extends Static {
+  constructor(name, x, y, passable, exp, health, mana, strength) {
+    super("item", x, y, true)
+    this.exp = exp
+    this.health = health
+    this.mana = mana
+    this.strength = strength
+  }
+}
+
+// export class Tome extends Static {
+//   constructor(name, x, y, passable, exp, health, mana, strength) {
+//     super("spell", x, y, true)
+//     this.exp = exp
+//     this.health = health
+//     this.mana = mana
+//     this.strength = strength
+//   }
+// }
+
+export class Rock extends Static {
+  constructor(name, x, y, passable) {
+    super("rock", x, y, false)
+  }
+}
+
+export class Water extends Static {
+  constructor(name, x, y, passable) {
+    super("water", x, y, false)
+  }
+}
+
+export class Land extends Static {
+  constructor(name, x, y, passable) {
+    super("land", x, y, true)
+  }
+}
+
+export class Exit extends Static {
+  constructor(name, x, y, passable) {
+    super("exit", x, y, true)
+  }
+  //regen map here when we figure out how
 }
