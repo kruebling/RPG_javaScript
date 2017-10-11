@@ -3,25 +3,24 @@ export class Env  {
     this.size = size;
     this.map = new Array(this.size);
     for (let i = 0; i < this.size; i++) {
-      this.map[i] = [0,0,0,0,0];
+      this.map[i] = new Array(this.size);
+      for (let j = 0; j < this.size; j++) {
+        this.map[i][j] = 0;
+      }
     }
   }
-
-
 }
 
 export class Living  {
-  constructor(name,lvl,health,mana,strength,x,y) {
+  constructor(name,lvl,exp,health,strength,x,y) {
     this.name = name;
     this.lvl = lvl;
-    this.exp = 0;
+    this.exp = exp;
     this.health = health;
-    this.mana = mana;
     this.strength = strength;
     this.pos_y = x;
     this.pos_x = y;
     this.satchel = [];
-    // this.spellbook = [];
   }
 
   move(y, x, an_env){
@@ -38,17 +37,51 @@ export class Living  {
     }
     return false;
   }
+
+  pick_up_items(loot){
+    this.satchel.push(loot);
+  }
+  add_tome(spell){
+    spell.usage_count = 0;
+    this.spellbook.push(spell);
+    this.satchel = this.satchel.filter((item) => {
+      return item.usage_count > 0;
+    });
+  }
+  equip_gear(gear) {
+    gear.usage_count = 0;
+    this.equipment.push(gear);
+    this.satchel = this.satchel.filter((item) => {
+      return item.usage_count > 0;
+    });
+  }
 }
 
 export class Player extends Living {
-  constructor(name) {
-    super(name,1,100,50,10,0,0);
+  constructor(name, mana) {
+    // name,lvl,exp,health,strength,x,y
+    super(name,1,0,100,5,0,0);
+    this.mana = mana;
+    this.spellbook = [];
+    this.equipment = [];
+  }
+
+  item_use(an_item) {
+    --an_item.usage_count;
+    this.health += an_item.health
+    this.mana += an_item.mana
+    this.exp += an_item.exp
+    this.strength += an_item.strength
+    this.satchel = this.satchel.filter((item) => {
+      return item.usage_count > 0;
+    });
   }
 }
 
 export class Enemy extends Living {
-  constructor(name,lvl,health,strength,x,y) {
-    super(name,lvl,health,0,strength,x,y);
+  constructor(name,lvl,x,y) {
+    // name,lvl,exp,health,strength,x,y
+    super(name,lvl,(lvl*5),(lvl*30),(lvl * 3),x,y);
   }
 }
 
@@ -59,27 +92,35 @@ export class Static {
     this.y = y
     this.passable = passable
   }
-}
-
-export class Item extends Static {
-  constructor(name, x, y, passable, exp, health, mana, strength) {
-    super("item", x, y, true)
-    this.exp = exp
-    this.health = health
-    this.mana = mana
-    this.strength = strength
+  placement(an_env){
+    an_env.map[this.y][this.x] = this;
   }
 }
 
-// export class Tome extends Static {
-//   constructor(name, x, y, passable, exp, health, mana, strength) {
-//     super("spell", x, y, true)
-//     this.exp = exp
-//     this.health = health
-//     this.mana = mana
-//     this.strength = strength
-//   }
-// }
+export class Item extends Static {
+  constructor(name, x, y, exp, health, mana, strength, usage_count) {
+    super(name, x, y, true);
+    this.exp = exp;
+    this.health = health;
+    this.mana = mana;
+    this.strength = strength;
+    this.usage_count = usage_count;
+  }
+}
+
+export class Equipment extends Item {
+  constructor (name, x, y, health, mana, strength) {
+    super(name, x, y, 0, health, mana, strength, 1);
+    this.equip = true
+  }
+}
+
+export class Tome extends Item {
+  constructor(name, x, y, health, mana, strength) {
+    super(name, x, y, 0, health, mana, strength, 1);
+    this.equip = true
+  }
+}
 
 export class Rock extends Static {
   constructor(name, x, y, passable) {
