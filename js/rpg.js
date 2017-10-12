@@ -98,12 +98,22 @@ export class Player extends Living {
     let roll = mod(5)
     if (roll < 3){
       return true
+    }else{
+      return false
     }
   }
 
   cast(spell, target) {
     target.health += Math.floor(spell.health + (spell.heath * (this.lvl * .1)))
     this.mana += spell.mana
+  }
+
+  lvl_up() {
+    if (this.exp >= (this.lvl * 100)){
+      this.exp -= (this.lvl * 100)
+      this.lvl += 1
+      return true
+    }
   }
 }
 
