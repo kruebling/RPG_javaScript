@@ -55,6 +55,14 @@ export class Living  {
     }
   }
 
+  death(an_env) {
+    if (this.health <= 0){
+      an_env.map[this.pos_y][this.pos_x] = 0;
+      return true;
+    }
+    return false;
+  }
+
   pick_up_items(loot){
     this.satchel.push(loot);
   }
@@ -75,10 +83,10 @@ export class Living  {
 }
 
 export class Player extends Living {
-  constructor(name, mana) {
+  constructor(name) {
     // name,lvl,exp,health,strength,x,y
     super(name,1,0,100,5,0,0);
-    this.mana = mana;
+    this.mana = 50;
     this.spellbook = [];
     this.equipment = [];
   }
@@ -104,23 +112,49 @@ export class Player extends Living {
   }
 
   cast(spell, target) {
-    target.health += Math.floor(spell.health + (spell.heath * (this.lvl * .1)))
-    this.mana += spell.mana
+    target.health += spell.health + (spell.health * (this.lvl * 0.1));
+    this.mana += spell.mana;
   }
 
   lvl_up() {
     if (this.exp >= (this.lvl * 100)){
-      this.exp -= (this.lvl * 100)
-      this.lvl += 1
-      return true
+      this.exp -= (this.lvl * 100);
+      this.lvl += 1;
+      this.health += 100
+      this.mana += 50
+      this.strength += 5
+      return true;
     }
   }
-}
+
+  death(an_env) {
+    if (super.death(an_env)){
+      if (this.lvl > 1){
+        this.lvl -= 1
+      }
+      this.exp = 0
+      this.satchel = []
+      this.health = 100 + (100 * this.lvl)
+      this.mana = 50 + (50 * this.lvl)
+      this.strength = 5 + (5 * this.lvl)
+      return true
+    };
+  };
+};
 
 export class Enemy extends Living {
   constructor(name,lvl,x,y) {
     // name,lvl,exp,health,strength,x,y
     super(name,lvl,(lvl*5),(lvl*30),(lvl * 3),x,y);
+  }
+
+  death(player, an_env) {
+    if (super.death(an_env)) {
+      player.exp += this.exp;
+      player.pick_up_items(this.satchel[0]);
+      //player.health += 10 (bonus after combat)
+      return true;
+    }
   }
 }
 
@@ -159,8 +193,6 @@ export class Tome extends Item {
     super(name, x, y, 0, health, mana, 0, 1);
     this.equip = true
   }
-
-
 }
 
 export class Rock extends Static {
@@ -181,9 +213,9 @@ export class Land extends Static {
   }
 }
 
-export class Exit extends Static {
-  constructor(name, x, y, passable) {
-    super("exit", x, y, true)
-  }
-  //regen map here when we figure out how
-}
+// export class Exit extends Static {
+//   constructor(name, x, y, passable) {
+//     super("exit", x, y, true)
+//   }
+//   //regen map here when we figure out how
+// }

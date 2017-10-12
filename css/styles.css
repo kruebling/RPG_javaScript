@@ -1,0 +1,24 @@
+.water {
+  background-color: rgb(64, 64, 255);
+}
+
+.land {
+  background-color: rgb()
+}
+
+.tile {
+  height: 100px;
+}
+
+.row {
+}
+
+.col{
+  padding: 0 !important;
+  border: 2px solid black;
+}
+
+img {
+  height: 100px;
+  width: 100px;
+}
