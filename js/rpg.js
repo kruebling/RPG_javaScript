@@ -38,6 +38,23 @@ export class Living  {
     return false;
   }
 
+  // Returns a number between 1 and max
+  mod(max) {
+    return Math.ceil(Math.random() * max); //1-5 && 1-10
+  }
+
+  attack(target) {
+    let roll1 = this.mod(6)
+    let roll2 = (this.mod(10) / 10)
+    if (roll1 === 1){
+      return false;
+    }else if (roll1 < 6){
+      target.health -= Math.floor(this.strength + (roll2 * this.strength));
+    }else{
+      target.health -= Math.floor((this.strength + (roll2 * this.strength)) * 1.25);
+    }
+  }
+
   pick_up_items(loot){
     this.satchel.push(loot);
   }
@@ -75,6 +92,18 @@ export class Player extends Living {
     this.satchel = this.satchel.filter((item) => {
       return item.usage_count > 0;
     });
+  }
+
+  flee() {
+    let roll = mod(5)
+    if (roll < 3){
+      return true
+    }
+  }
+
+  cast(spell, target) {
+    target.health += Math.floor(spell.health + (spell.heath * (this.lvl * .1)))
+    this.mana += spell.mana
   }
 }
 
@@ -116,10 +145,12 @@ export class Equipment extends Item {
 }
 
 export class Tome extends Item {
-  constructor(name, x, y, health, mana, strength) {
-    super(name, x, y, 0, health, mana, strength, 1);
+  constructor(name, x, y, health, mana) {
+    super(name, x, y, 0, health, mana, 0, 1);
     this.equip = true
   }
+
+
 }
 
 export class Rock extends Static {
