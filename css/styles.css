@@ -1,9 +1,43 @@
 .water {
-  background-color: rgb(64, 64, 255);
+  background-image: url('./../../img/water.png');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
 }
 
 .land {
-  background-color: rgb()
+  background-image: url('./../../img/land.png');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+}
+
+.rock {
+  background-image: url('./../../img/rock.png');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+}
+
+.chest {
+  background-image: url('./../../img/chest.png');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+}
+
+.player {
+  background-image: url('./../../img/player.png');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+}
+
+.enemy {
+  background-image: url('./../../img/enemy.png');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
 }
 
 .tile {
@@ -15,10 +49,5 @@
 
 .col{
   padding: 0 !important;
-  border: 2px solid black;
-}
-
-img {
-  height: 100px;
-  width: 100px;
+  border: 1px solid black;
 }

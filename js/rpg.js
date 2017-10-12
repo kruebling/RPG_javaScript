@@ -195,24 +195,6 @@ export class Tome extends Item {
   }
 }
 
-export class Rock extends Static {
-  constructor(name, x, y, passable) {
-    super("rock", x, y, false)
-  }
-}
-
-export class Water extends Static {
-  constructor(name, x, y, passable) {
-    super("water", x, y, false)
-  }
-}
-
-export class Land extends Static {
-  constructor(name, x, y, passable) {
-    super("land", x, y, true)
-  }
-}
-
 // export class Exit extends Static {
 //   constructor(name, x, y, passable) {
 //     super("exit", x, y, true)
