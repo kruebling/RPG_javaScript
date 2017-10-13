@@ -5,7 +5,7 @@ export class Env  {
     for (let i = 0; i < this.size; i++) {
       this.map[i] = new Array(this.size);
       for (let j = 0; j < this.size; j++) {
-        this.map[i][j] = 0;
+        this.map[i][j] = new Static("land",j,i,true);
       }
     }
   }
@@ -24,16 +24,13 @@ export class Living  {
   }
 
   move(y, x, an_env){
-    if ((y < an_env.size && y >= 0) && (x < an_env.size && x >= 0)){
-      if ((y === this.pos_y) && (x === (this.pos_x + 1)) || (y === this.pos_y) && (x === (this.pos_x - 1)) || (x === this.pos_x) && (y === (this.pos_y + 1)) || (x === this.pos_x) && (y === (this.pos_y - 1))) {
-        // Transistion position on map in an_env object
-        an_env.map[this.pos_y][this.pos_x] = 0;
-        an_env.map[y][x] = this;
-        // Updates the position of the living object
-        this.pos_y = y;
-        this.pos_x = x;
-        return true;
-      }
+    if ((y < an_env.size && y >= 0) && (x < an_env.size && x >= 0) && ((an_env.map[y][x]).passable === true)){
+      // Transistion position on map in an_env object
+      an_env.map[this.pos_y][this.pos_x] = new Static("land",this.pos_y,this.pos_x,true);
+      // Updates the position of the living object
+      this.pos_y = y;
+      this.pos_x = x;
+      return true;
     }
     return false;
   }
